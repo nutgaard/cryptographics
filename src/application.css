@@ -1,16 +1,41 @@
 .application {
+  height: 100%;
   color: #e6e6e6;
   overflow: scroll;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
 }
 
 .application .box {
   margin-bottom: 1rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  flex-basis: 100%;
+  flex-grow: 1;
   width: 384px;
   min-height: 300px;
+}
+
+@media (min-width: 50rem) {
+  .application .box {
+    flex-basis: 33%;
+  }
+}
+
+@media (min-width: 80rem) {
+  .application .box {
+    flex-basis: 25%;
+  }
+}
+
+@media (min-width: 110rem) {
+  .application .box {
+    flex-basis: 20%;
+  }
 }
 
 .center {
@@ -23,7 +48,7 @@
   margin-top: 0;
   margin-bottom: -0.25rem;
   font-size: 12px;
-  color: #767676;
+  color: #cecdcd;
 }
 .price {
   margin-top: 0;
@@ -45,4 +70,41 @@
   border-right: 20px solid transparent;
 
   border-top: 20px solid #f00;
+}
+.trendingbox .box__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.types {
+  margin: 0 auto;
+}
+
+input[type="radio"] {
+  position: absolute;
+  left: -9999px;
+}
+
+input[type="radio"] + label {
+  border: 1px solid rgba(0, 204, 204, 0.7);
+  border-left: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: rgba(0, 104, 104, 0.5);
+}
+input[type="radio"] + label:first-of-type {
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-left: 1px solid rgba(0, 204, 204, 0.7);
+}
+input[type="radio"] + label:last-of-type {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+input[type="radio"]:checked + label {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: rgb(57, 158, 158);
 }

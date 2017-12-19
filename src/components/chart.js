@@ -1,4 +1,5 @@
 import React from 'react';
+import Aux from './aux';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory';
 
 const myTheme = VictoryTheme.material;
@@ -9,7 +10,7 @@ myTheme.axis.style.grid.stroke = 'none';
 
 
 function Chart({ state, currency }){
-    const { laster, data } = state;
+    const { laster, data, type } = state;
     if (laster) {
         return <h1>Laster</h1>;
     }
@@ -19,24 +20,27 @@ function Chart({ state, currency }){
 
     const half = Math.round(d.length / 2);
     const tickValues = [d[0], d[half], d[d.length - 1]].map((dv) => dv.time);
-    const tickFormat = tickValues.map((dV) => new Date(dV).toLocaleDateString('nb'));
+    const tickFormat = type !== 'minute' ? tickValues.map((dV) => new Date(dV).toLocaleDateString('nb')) : tickValues.map((dV) => new Date(dV).toLocaleTimeString('nb'));
 
     return (
-        <VictoryChart theme={myTheme}>
-            <VictoryAxis
-                tickValues={tickValues}
-                tickFormat={tickFormat}
-            />
-            <VictoryAxis
-                dependentAxis
-                tickFormat={(x) => x >= 1000 ? (`$${x / 1000}k`) : `$${x}`}
-            />
-            <VictoryBar
-                data={d}
-                x="time"
-                y="total"
-            />
-        </VictoryChart>
+        <Aux>
+            <VictoryChart theme={myTheme}>
+                <VictoryAxis
+                    tickValues={tickValues}
+                    tickFormat={tickFormat}
+                />
+                <VictoryAxis
+                    dependentAxis
+                    tickFormat={(x) => x >= 1000 ? (`$${x / 1000}k`) : `$${x}`}
+                />
+                <VictoryBar
+                    data={d}
+                    x="time"
+                    y="total"
+                />
+            </VictoryChart>
+            <div className="touchoverlay" />
+        </Aux>
     );
 }
 

@@ -3,8 +3,14 @@ import Box from './components/box';
 import Chart from './components/chart';
 import './application.css';
 
-function fetchData(currency) {
-    return fetch(`https://min-api.cryptocompare.com/data/histoday?fsym=${currency}&tsym=USD&limit=122&aggregate=3`)
+const urls = {
+    'minute': (currency) => `https://min-api.cryptocompare.com/data/histominute?fsym=${currency}&tsym=USD&limit=120&aggregate=3`, // 6 hours
+    'hour': (currency) => `https://min-api.cryptocompare.com/data/histohour?fsym=${currency}&tsym=USD&limit=128&aggregate=3`, // 16 days
+    'day': (currency) => `https://min-api.cryptocompare.com/data/histoday?fsym=${currency}&tsym=USD&limit=128`, // 64 days
+};
+
+function fetchData(currency, type) {
+    return fetch(urls[type](currency))
         .then((resp) => {
             if (resp.ok) {
                 return resp;
@@ -61,24 +67,26 @@ function price(state, datapoint, key) {
     return `${value}$`;
 }
 
-function getTime(time) {
-    return new Date(parseInt(time + '000', 10)).toLocaleDateString('nb');
+function getTime(time, type) {
+    const date = new Date(parseInt(time + '000', 10));
+    return type !== 'minute' ? date.toLocaleDateString('nb') : date.toLocaleString('nb');
 }
 
 class Application extends Component {
     state = {
+        type: 'hour',
         laster: true,
         data: null
     };
 
-    componentDidMount() {
+    hentData = () => {
         settled(
-            fetchData('BTC'),
-            fetchData('LTC'),
-            fetchData('DASH'),
-            fetchData('ETH'),
-            fetchData('XMR'),
-            fetchData('XRP')
+            fetchData('BTC', this.state.type),
+            fetchData('LTC', this.state.type),
+            fetchData('DASH', this.state.type),
+            fetchData('ETH', this.state.type),
+            fetchData('XMR', this.state.type),
+            fetchData('XRP', this.state.type)
         ).then((data) => {
             const rejected = data
                 .filter((currency) => currency.state === 'rejected')
@@ -133,15 +141,24 @@ class Application extends Component {
                     }
                 });
             }
-        })
+        });
+    };
+
+    setType = (event) =>{
+        this.setState({ type: event.target.value }, this.hentData);
+    }
+
+    componentDidMount() {
+        this.hentData();
     }
 
     render() {
         const times = this.state.laster ? [0] : Object.keys(this.state.data.grouped)
-            .sort((a,b) => b - a);
+            .sort((a,b) => (b - a));
         const latestdatapoint = times[0];
+        const secondtoLastdatapoint = times[1];
         const firstdatapoint = times[times.length - 1];
-        
+
         const boxes = [
             <Box key="total" title={`Total - ${price(this.state, latestdatapoint, 'total')}`}>
                 <Chart state={this.state} currency="total"/>
@@ -153,22 +170,54 @@ class Application extends Component {
                     </Box>
                 ))];
 
-        const startPrice = price(this.state, firstdatapoint, 'total');
+        const startPrice = price(this.state, secondtoLastdatapoint, 'total');
         const endPrice = price(this.state, latestdatapoint, 'total');
+        const firstPrice = price(this.state, firstdatapoint, 'total');
+
         const isRising = parseFloat(startPrice) < parseFloat(endPrice);
+        const diff = `${(parseFloat(endPrice) - parseFloat(startPrice)).toFixed(2)}$`;
+        const isRisingFromStart = parseFloat(firstPrice) < parseFloat(endPrice);
+        const diffFromStart= `${(parseFloat(endPrice) - parseFloat(firstPrice)).toFixed(2)}$`;
         return (
             <div className="application">
-                <Box key="holding" title="Trend">
-                    <div style={{marginTop: '2rem'}}>
-                        <p className="center pricedate">{getTime(latestdatapoint)}</p>
+                <Box key="holding" title="Trend" className="trendingbox">
+                    <div>
+                        <p className="center pricedate">{getTime(latestdatapoint, this.state.type)}</p>
                         <h1 className="center price">{endPrice}</h1>
                     </div>
-                    <div>
-                        <p className={isRising ? 'center trend-up' : 'center trend-down'} />
+                    <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+                        <div>
+                            <div>
+                                <p className={isRising ? 'center trend-up' : 'center trend-down'} />
+                            </div>
+                            <div>
+                                <h2 className="center price">{diff}</h2>
+                            </div>
+                            <div>
+                                <p className="center pricedate">{getTime(secondtoLastdatapoint, this.state.type)}</p>
+                                <h2 className="center price">{startPrice}</h2>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <p className={isRisingFromStart ? 'center trend-up' : 'center trend-down'} />
+                            </div>
+                            <div>
+                                <h2 className="center price">{diffFromStart}</h2>
+                            </div>
+                            <div>
+                                <p className="center pricedate">{getTime(firstdatapoint, this.state.type)}</p>
+                                <h2 className="center price">{firstPrice}</h2>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p className="center pricedate">{getTime(firstdatapoint)}</p>
-                        <h2 className="center price">{startPrice}</h2>
+                    <div className="types">
+                        <input type="radio" name="type" value="minute" id="minute" checked={this.state.type === 'minute'} onChange={this.setType}/>
+                        <label htmlFor="minute">6 hours</label>
+                        <input type="radio" name="type" value="hour" id="hour" checked={this.state.type === 'hour'} onChange={this.setType}/>
+                        <label htmlFor="hour">16 days</label>
+                        <input type="radio" name="type" value="day" id="day" checked={this.state.type === 'day'} onChange={this.setType}/>
+                        <label htmlFor="day">128 days</label>
                     </div>
                 </Box>
                 {boxes}
@@ -178,5 +227,3 @@ class Application extends Component {
 }
 
 export default Application;
-
-//https://min-api.cryptocompare.com/data/
