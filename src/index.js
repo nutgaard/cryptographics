@@ -4,7 +4,7 @@ import './index.css';
 import Aux from './components/aux';
 import Background from './background';
 import Application from './application';
-// import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './registerServiceWorker';
 
 function App() {
     return (
@@ -16,4 +16,4 @@ function App() {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
-// registerServiceWorker();
+registerServiceWorker();
