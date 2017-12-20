@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import LZString from 'lz-string';
 import Box from './components/box';
 import Chart from './components/chart';
 import './application.css';
+
+window.LZString = LZString;
 
 const urls = {
     'minute': (currency) => `https://min-api.cryptocompare.com/data/histominute?fsym=${currency}&tsym=USD&limit=120&aggregate=3`, // 6 hours
@@ -72,12 +75,28 @@ function getTime(time, type) {
     return type !== 'minute' ? date.toLocaleDateString('nb') : date.toLocaleString('nb');
 }
 
+const storageVersion = 1;
+function lastFraLocalstorage() {
+    const data = JSON.parse(window.localStorage.getItem('cryptographics'));
+    if (data && data.version === storageVersion) {
+        return JSON.parse(LZString.decompress(data.content));
+    } else {
+        return {
+            type: 'hour',
+            laster: true,
+            data: null
+        };
+    }
+}
+
+function lagreTilLocalstorage(state) {
+    const stateJSON = LZString.compress(JSON.stringify(state));
+    const content = JSON.stringify({ version: storageVersion, content: stateJSON });
+    window.localStorage.setItem('cryptographics', content);
+}
+
 class Application extends Component {
-    state = {
-        type: 'hour',
-        laster: true,
-        data: null
-    };
+    state = lastFraLocalstorage();
 
     hentData = () => {
         settled(
@@ -131,7 +150,7 @@ class Application extends Component {
                         rejected,
                         fulfilled
                     }
-                });
+                }, () => lagreTilLocalstorage(this.state));
             } else {
                 this.setState({
                     laster: false,
@@ -139,7 +158,7 @@ class Application extends Component {
                         rejected,
                         fulfilled
                     }
-                });
+                }, () => lagreTilLocalstorage(this.state));
             }
         });
     };
