@@ -155,11 +155,7 @@ class Application extends Component {
                 }, () => lagreTilLocalstorage(this.state));
             } else {
                 this.setState({
-                    laster: false,
-                    data: {
-                        rejected,
-                        fulfilled
-                    }
+                    laster: false
                 }, () => lagreTilLocalstorage(this.state));
             }
         });
