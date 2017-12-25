@@ -6,8 +6,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
 }
 
 .application .box {

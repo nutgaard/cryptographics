@@ -16,5 +16,6 @@ fs.readFile('./icon.svg', (err, data) => {
     saveToSize(data, 144);
     saveToSize(data, 168);
     saveToSize(data, 192);
+    saveToSize(data, 256);
     saveToSize(data, 512);
 });
