@@ -20,7 +20,7 @@ function Chart({ state, currency }){
 
     const half = Math.round(d.length / 2);
     const tickValues = [d[0], d[half], d[d.length - 1]].map((dv) => dv.time);
-    const tickFormat = type !== 'minute' ? tickValues.map((dV) => new Date(dV).toLocaleDateString('nb')) : tickValues.map((dV) => new Date(dV).toLocaleTimeString('nb'));
+    const tickFormat = ['2H', '1D'].includes(type) ? tickValues.map((dV) => new Date(dV).toLocaleTimeString('nb')) : tickValues.map((dV) => new Date(dV).toLocaleDateString('nb'));
 
     return (
         <Aux>

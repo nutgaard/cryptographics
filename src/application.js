@@ -7,9 +7,11 @@ import './application.css';
 window.LZString = LZString;
 
 const urls = {
-    'minute': (currency) => `https://min-api.cryptocompare.com/data/histominute?fsym=${currency}&tsym=USD&limit=120&aggregate=3`, // 6 hours
-    'hour': (currency) => `https://min-api.cryptocompare.com/data/histohour?fsym=${currency}&tsym=USD&limit=128&aggregate=3`, // 16 days
-    'day': (currency) => `https://min-api.cryptocompare.com/data/histoday?fsym=${currency}&tsym=USD&limit=128`, // 64 days
+    '2H': (currency) => `https://min-api.cryptocompare.com/data/histominute?fsym=${currency}&tsym=USD&limit=120`,
+    '1D': (currency) => `https://min-api.cryptocompare.com/data/histominute?fsym=${currency}&tsym=USD&limit=120&aggregate=12`,
+    '1W': (currency) => `https://min-api.cryptocompare.com/data/histohour?fsym=${currency}&tsym=USD&limit=168`,
+    '1M': (currency) => `https://min-api.cryptocompare.com/data/histohour?fsym=${currency}&tsym=USD&limit=120&aggregate=6`,
+    '1Y': (currency) => `https://min-api.cryptocompare.com/data/histoday?fsym=${currency}&tsym=USD&limit=120&aggregate=3`
 };
 
 function fetchData(currency, type) {
@@ -72,17 +74,17 @@ function price(state, datapoint, key) {
 
 function getTime(time, type) {
     const date = new Date(parseInt(time + '000', 10));
-    return type !== 'minute' ? date.toLocaleDateString('nb') : date.toLocaleString('nb');
+    return date.toLocaleString('nb');
 }
 
-const storageVersion = 1;
+const storageVersion = 2;
 function lastFraLocalstorage() {
     const data = JSON.parse(window.localStorage.getItem('cryptographics'));
     if (data && data.version === storageVersion) {
         return JSON.parse(LZString.decompress(data.content));
     } else {
         return {
-            type: 'hour',
+            type: '1W',
             laster: true,
             data: null
         };
@@ -231,12 +233,16 @@ class Application extends Component {
                         </div>
                     </div>
                     <div className="types">
-                        <input type="radio" name="type" value="minute" id="minute" checked={this.state.type === 'minute'} onChange={this.setType}/>
-                        <label htmlFor="minute">6 hours</label>
-                        <input type="radio" name="type" value="hour" id="hour" checked={this.state.type === 'hour'} onChange={this.setType}/>
-                        <label htmlFor="hour">16 days</label>
-                        <input type="radio" name="type" value="day" id="day" checked={this.state.type === 'day'} onChange={this.setType}/>
-                        <label htmlFor="day">128 days</label>
+                        <input type="radio" name="type" value="2H" id="2H" checked={this.state.type === '2H'} onChange={this.setType}/>
+                        <label htmlFor="2H">2H</label>
+                        <input type="radio" name="type" value="1D" id="1D" checked={this.state.type === '1D'} onChange={this.setType}/>
+                        <label htmlFor="1D">1D</label>
+                        <input type="radio" name="type" value="1W" id="1W" checked={this.state.type === '1W'} onChange={this.setType}/>
+                        <label htmlFor="1W">1W</label>
+                        <input type="radio" name="type" value="1M" id="1M" checked={this.state.type === '1M'} onChange={this.setType}/>
+                        <label htmlFor="1M">1M</label>
+                        <input type="radio" name="type" value="1Y" id="1Y" checked={this.state.type === '1Y'} onChange={this.setType}/>
+                        <label htmlFor="1Y">1Y</label>
                     </div>
                 </Box>
                 {boxes}
