@@ -18,6 +18,7 @@ function Chart({ state, currency }){
     const d = Object.entries(data.grouped)
         .map(([time, values]) => ({ time: parseInt(`${time}000`, 10), total: values[currency] }));
 
+
     const half = Math.round(d.length / 2);
     const tickValues = [d[0], d[half], d[d.length - 1]].map((dv) => dv.time);
     const tickFormat = type !== 'minute' ? tickValues.map((dV) => new Date(dV).toLocaleDateString('nb')) : tickValues.map((dV) => new Date(dV).toLocaleTimeString('nb'));
