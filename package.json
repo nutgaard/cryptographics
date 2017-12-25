@@ -12,10 +12,14 @@
     "victory": "^0.24.3"
   },
   "scripts": {
+    "buildicons": "node ./buildicons.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "publish": "yarn run build && gh-pages -d build"
+  },
+  "devDependencies": {
+    "svg2png": "^4.1.1"
   }
 }
