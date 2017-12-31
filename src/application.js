@@ -53,7 +53,8 @@ const coins = {
     ETH: 'Ethereum',
     LTC: 'Litecoin',
     XMR: 'Monero',
-    XRP: 'Ripple'
+    XRP: 'Ripple',
+    LSK: 'Lisk'
 };
 const holdings = {
     BTC: 0.0974,
@@ -61,14 +62,15 @@ const holdings = {
     ETH: 0.2151,
     DASH: 1,
     XMR: 1,
-    XRP: 605.18423
+    XRP: 605.18423,
+    LSK: 5.65434000
 };
 
 function price(state, datapoint, key) {
     if (state.laster) {
-        return "0.00$";
+        return '0.00$';
     }
-    const value =  state.data.grouped[datapoint][key].toFixed(2);
+    const value = state.data.grouped[datapoint][key].toFixed(2);
     return `${value}$`;
 }
 
@@ -77,7 +79,7 @@ function getTime(time, type) {
     return date.toLocaleString('nb');
 }
 
-const storageVersion = 2;
+const storageVersion = 3;
 function lastFraLocalstorage() {
     const data = JSON.parse(window.localStorage.getItem('cryptographics'));
     if (data && data.version === storageVersion) {
@@ -101,67 +103,61 @@ class Application extends Component {
     state = lastFraLocalstorage();
 
     hentData = () => {
-        settled(
-            fetchData('BTC', this.state.type),
-            fetchData('LTC', this.state.type),
-            fetchData('DASH', this.state.type),
-            fetchData('ETH', this.state.type),
-            fetchData('XMR', this.state.type),
-            fetchData('XRP', this.state.type)
-        ).then((data) => {
-            const rejected = data
-                .filter((currency) => currency.state === 'rejected')
-                .map((currency) => currency.currency);
+        settled(...Object.keys(holdings).map((currency) => fetchData(currency, this.state.type)))
+            .then((data) => {
+                const rejected = data
+                    .filter((currency) => currency.state === 'rejected')
+                    .map((currency) => currency.currency);
 
-            const fulfilled = data
-                .filter((currency) => currency.state === 'fulfilled')
-                .map((currency) => {
-                    return {
-                        currency: currency.currency,
-                        data: currency.result.Data.reduce((acc, { time, close }) => ({ ...acc, [time]: close }), {})
-                    };
-                });
-
-            if (fulfilled.length > 0) {
-                const timedGroup = Object.keys(fulfilled[0].data)
-                    .reduce((acc, time) => ({
-                        ...acc, [time]: {
-                            ...fulfilled.reduce((coinacc, ff) => ({
-                                ...coinacc,
-                                [ff.currency]: ff.data[time]
-                            }), {})
-                        }
-                    }), {});
-
-                Object.values(timedGroup)
-                    .forEach((group) => {
-                        Object.keys(group)
-                            .forEach((c) => {
-                                group[`${c}-USD`] = parseFloat((group[c] * holdings[c]).toFixed(2));
-                            });
-
-                        group.total = Object.keys(group)
-                            .filter((c) => c.endsWith('-USD'))
-                            .reduce((a, b) => a + group[b], 0);
+                const fulfilled = data
+                    .filter((currency) => currency.state === 'fulfilled')
+                    .map((currency) => {
+                        return {
+                            currency: currency.currency,
+                            data: currency.result.Data.reduce((acc, { time, close }) => ({ ...acc, [time]: close }), {})
+                        };
                     });
 
-                this.setState({
-                    laster: false,
-                    data: {
-                        grouped: timedGroup,
-                        rejected,
-                        fulfilled
-                    }
-                }, () => lagreTilLocalstorage(this.state));
-            } else {
-                this.setState({
-                    laster: false
-                }, () => lagreTilLocalstorage(this.state));
-            }
-        });
+                if (fulfilled.length > 0) {
+                    const timedGroup = Object.keys(fulfilled[0].data)
+                        .reduce((acc, time) => ({
+                            ...acc, [time]: {
+                                ...fulfilled.reduce((coinacc, ff) => ({
+                                    ...coinacc,
+                                    [ff.currency]: ff.data[time]
+                                }), {})
+                            }
+                        }), {});
+
+                    Object.values(timedGroup)
+                        .forEach((group) => {
+                            Object.keys(group)
+                                .forEach((c) => {
+                                    group[`${c}-USD`] = parseFloat((group[c] * holdings[c]).toFixed(2));
+                                });
+
+                            group.total = Object.keys(group)
+                                .filter((c) => c.endsWith('-USD'))
+                                .reduce((a, b) => a + group[b], 0);
+                        });
+
+                    this.setState({
+                        laster: false,
+                        data: {
+                            grouped: timedGroup,
+                            rejected,
+                            fulfilled
+                        }
+                    }, () => lagreTilLocalstorage(this.state));
+                } else {
+                    this.setState({
+                        laster: false
+                    }, () => lagreTilLocalstorage(this.state));
+                }
+            });
     };
 
-    setType = (event) =>{
+    setType = (event) => {
         this.setState({ type: event.target.value }, this.hentData);
     }
 
@@ -170,8 +166,8 @@ class Application extends Component {
     }
 
     render() {
-        const times = this.state.laster ? [0] : Object.keys(this.state.data.grouped)
-            .sort((a,b) => (b - a));
+        const times = this.state.laster ? [0] : Object.keys(this.state.data.grouped)
+            .sort((a, b) => (b - a));
         const latestdatapoint = times[0];
         const secondtoLastdatapoint = times[1];
         const firstdatapoint = times[times.length - 1];
@@ -182,7 +178,8 @@ class Application extends Component {
             </Box>,
             ...Object.keys(holdings)
                 .map((currency) => (
-                    <Box key={currency} title={`${coins[currency]} (${currency}) - ${price(this.state, latestdatapoint, `${currency}-USD`)}`}>
+                    <Box key={currency}
+                         title={`${coins[currency]} (${currency}) - ${price(this.state, latestdatapoint, `${currency}-USD`)}`}>
                         <Chart state={this.state} currency={currency}/>
                     </Box>
                 ))];
@@ -194,7 +191,7 @@ class Application extends Component {
         const isRising = parseFloat(startPrice) < parseFloat(endPrice);
         const diff = `${(parseFloat(endPrice) - parseFloat(startPrice)).toFixed(2)}$`;
         const isRisingFromStart = parseFloat(firstPrice) < parseFloat(endPrice);
-        const diffFromStart= `${(parseFloat(endPrice) - parseFloat(firstPrice)).toFixed(2)}$`;
+        const diffFromStart = `${(parseFloat(endPrice) - parseFloat(firstPrice)).toFixed(2)}$`;
         return (
             <div className="application">
                 <Box key="holding" title="Trend" className="trendingbox">
@@ -202,10 +199,10 @@ class Application extends Component {
                         <p className="center pricedate">{getTime(latestdatapoint, this.state.type)}</p>
                         <h1 className="center price">{endPrice}</h1>
                     </div>
-                    <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+                    <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                         <div>
                             <div>
-                                <p className={isRising ? 'center trend-up' : 'center trend-down'} />
+                                <p className={isRising ? 'center trend-up' : 'center trend-down'}/>
                             </div>
                             <div>
                                 <h2 className="center price">{diff}</h2>
@@ -217,7 +214,7 @@ class Application extends Component {
                         </div>
                         <div>
                             <div>
-                                <p className={isRisingFromStart ? 'center trend-up' : 'center trend-down'} />
+                                <p className={isRisingFromStart ? 'center trend-up' : 'center trend-down'}/>
                             </div>
                             <div>
                                 <h2 className="center price">{diffFromStart}</h2>
@@ -229,15 +226,20 @@ class Application extends Component {
                         </div>
                     </div>
                     <div className="types">
-                        <input type="radio" name="type" value="2H" id="2H" checked={this.state.type === '2H'} onChange={this.setType}/>
+                        <input type="radio" name="type" value="2H" id="2H" checked={this.state.type === '2H'}
+                               onChange={this.setType}/>
                         <label htmlFor="2H">2H</label>
-                        <input type="radio" name="type" value="1D" id="1D" checked={this.state.type === '1D'} onChange={this.setType}/>
+                        <input type="radio" name="type" value="1D" id="1D" checked={this.state.type === '1D'}
+                               onChange={this.setType}/>
                         <label htmlFor="1D">1D</label>
-                        <input type="radio" name="type" value="1W" id="1W" checked={this.state.type === '1W'} onChange={this.setType}/>
+                        <input type="radio" name="type" value="1W" id="1W" checked={this.state.type === '1W'}
+                               onChange={this.setType}/>
                         <label htmlFor="1W">1W</label>
-                        <input type="radio" name="type" value="1M" id="1M" checked={this.state.type === '1M'} onChange={this.setType}/>
+                        <input type="radio" name="type" value="1M" id="1M" checked={this.state.type === '1M'}
+                               onChange={this.setType}/>
                         <label htmlFor="1M">1M</label>
-                        <input type="radio" name="type" value="1Y" id="1Y" checked={this.state.type === '1Y'} onChange={this.setType}/>
+                        <input type="radio" name="type" value="1Y" id="1Y" checked={this.state.type === '1Y'}
+                               onChange={this.setType}/>
                         <label htmlFor="1Y">1Y</label>
                     </div>
                 </Box>
