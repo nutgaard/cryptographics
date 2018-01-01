@@ -54,7 +54,8 @@ const coins = {
     LTC: 'Litecoin',
     XMR: 'Monero',
     XRP: 'Ripple',
-    LSK: 'Lisk'
+    LSK: 'Lisk',
+    REQ: 'Request Network'
 };
 const holdings = {
     BTC: 0.0974,
@@ -63,7 +64,8 @@ const holdings = {
     DASH: 1,
     XMR: 1,
     XRP: 605.18423,
-    LSK: 5.65434000
+    LSK: 5.65434000,
+    REQ: 19.98
 };
 
 function price(state, datapoint, key) {
@@ -79,7 +81,7 @@ function getTime(time, type) {
     return date.toLocaleString('nb');
 }
 
-const storageVersion = 3;
+const storageVersion = 4;
 function lastFraLocalstorage() {
     const data = JSON.parse(window.localStorage.getItem('cryptographics'));
     if (data && data.version === storageVersion) {
