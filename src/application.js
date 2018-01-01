@@ -60,7 +60,7 @@ const coins = {
 const holdings = {
     BTC: 0.0974,
     LTC: 5.9253,
-    ETH: 0.2151,
+    ETH: 0.1995,
     DASH: 1,
     XMR: 1,
     XRP: 605.18423,
