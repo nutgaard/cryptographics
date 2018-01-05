@@ -49,21 +49,23 @@ function settled(...promises) {
 
 const coins = {
     BTC: 'Bitcoin',
+    LTC: 'Litecoin',
+    XRP: 'Ripple',
+    XRB: 'RaiBlocks',
     DASH: 'Dash',
     ETH: 'Ethereum',
-    LTC: 'Litecoin',
     XMR: 'Monero',
-    XRP: 'Ripple',
     LSK: 'Lisk',
-    REQ: 'Request Network'
+    REQ: 'Request Network',
 };
 const holdings = {
     BTC: 0.0974,
     LTC: 5.9253,
-    ETH: 0.1995,
-    DASH: 1,
-    XMR: 1,
     XRP: 605.18423,
+    XRB: 16.3365441,
+    DASH: 0.5,
+    ETH: 0.1995,
+    XMR: 1,
     LSK: 5.65434000,
     REQ: 19.98
 };
