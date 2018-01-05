@@ -52,6 +52,7 @@ const basemap = {
     XMR: 370,
     LSK: 25,
     REQ: 0.8,
+    DOGE: 0.01,
 };
 
 mock.get('begin:https://min-api.cryptocompare.com/data/', respondWith((url, config, extra) => {

@@ -53,21 +53,23 @@ const coins = {
     XRP: 'Ripple',
     XRB: 'RaiBlocks',
     DASH: 'Dash',
-    ETH: 'Ethereum',
     XMR: 'Monero',
+    ETH: 'Ethereum',
     LSK: 'Lisk',
     REQ: 'Request Network',
+    DOGE: 'Dogecoin'
 };
 const holdings = {
-    BTC: 0.0974,
-    LTC: 5.9253,
-    XRP: 605.18423,
-    XRB: 16.3365441,
-    DASH: 0.5,
-    ETH: 0.1995,
-    XMR: 1,
-    LSK: 5.65434000,
-    REQ: 19.98
+    BTC: 0.0974,        // Coinbase
+    LTC: 5.9253,        // Coinbase
+    XRP: 605.18423,     // Cryptonator
+    XRB: 16.3365441,    // Kucoin
+    DASH: 0.5,          // Cryptonator
+    XMR: 1,             // Cryptonator
+    ETH: 0.1995,        // Coinbase
+    LSK: 5.65434000,    // Binance
+    REQ: 19.98,         // Binance
+    DOGE: 800           // Cryptonator
 };
 
 function price(state, datapoint, key) {
