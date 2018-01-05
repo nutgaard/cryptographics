@@ -1,5 +1,5 @@
 import React from 'react';
-import Aux from './aux';
+import Aux from './react-aux';
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory';
 
 const myTheme = VictoryTheme.material;
