@@ -4,22 +4,27 @@
   "private": true,
   "homepage": "https://www.utgaard.xyz/cryptographics/",
   "dependencies": {
-    "gh-pages": "^1.1.0",
     "lz-string": "^1.4.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.0.17",
     "victory": "^0.24.3"
   },
   "scripts": {
     "buildicons": "node ./buildicons.js",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env REACT_APP_WITH_MOCKS=false react-scripts start",
+    "startmock": "cross-env REACT_APP_WITH_MOCKS=true react-scripts start",
+    "build": "cross-env REACT_APP_WITH_MOCKS=false react-scripts build",
+    "buildmock": "cross-env REACT_APP_WITH_MOCKS=true react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "publish": "yarn run build && gh-pages -d build"
   },
   "devDependencies": {
+    "cross-env": "^5.1.3",
+    "fetch-mock": "^6.0.0-beta.4",
+    "gh-pages": "^1.1.0",
+    "query-string": "^5.0.1",
+    "react-scripts": "1.0.17",
     "svg2png": "^4.1.1"
   }
 }
