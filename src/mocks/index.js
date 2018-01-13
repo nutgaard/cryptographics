@@ -48,6 +48,7 @@ const basemap = {
     XRP: 2.5,
     XRB: 32,
     DASH: 1100,
+    IOT: 4,
     ETH: 970,
     XMR: 370,
     LSK: 25,

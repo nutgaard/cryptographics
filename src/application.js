@@ -54,6 +54,7 @@ const coins = {
     XRB: 'RaiBlocks',
     DASH: 'Dash',
     XMR: 'Monero',
+    IOT: "IOTA",
     ETH: 'Ethereum',
     LSK: 'Lisk',
     REQ: 'Request Network',
@@ -61,11 +62,12 @@ const coins = {
 };
 const holdings = {
     BTC: 0.0974,        // Coinbase
-    LTC: 5.9253,        // Coinbase
+    LTC: 4.0465,        // Coinbase
     XRP: 605.18423,     // Cryptonator
     XRB: 16.3365441,    // Kucoin
     DASH: 0.5,          // Cryptonator
     XMR: 1,             // Cryptonator
+    IOT: 108.891,       // Binance
     ETH: 0.1995,        // Coinbase
     LSK: 5.65434000,    // Binance
     REQ: 19.98,         // Binance
@@ -85,7 +87,7 @@ function getTime(time, type) {
     return date.toLocaleString('nb');
 }
 
-const storageVersion = 4;
+const storageVersion = 5;
 function lastFraLocalstorage() {
     const data = JSON.parse(window.localStorage.getItem('cryptographics'));
     if (data && data.version === storageVersion) {
