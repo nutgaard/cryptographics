@@ -1,7 +1,16 @@
 {
-  "main.css": "static/css/main.9e262f95.css",
-  "main.css.map": "static/css/main.9e262f95.css.map",
-  "main.js": "static/js/main.1f898cec.js",
-  "main.js.map": "static/js/main.1f898cec.js.map",
-  "static\\media\\background.jpg": "static/media/background.cba90b7d.jpg"
+  "files": {
+    "main.css": "/cryptographics/static/css/main.3f24a661.chunk.css",
+    "main.js": "/cryptographics/static/js/main.1be1b61b.chunk.js",
+    "main.js.map": "/cryptographics/static/js/main.1be1b61b.chunk.js.map",
+    "runtime~main.js": "/cryptographics/static/js/runtime~main.67830c15.js",
+    "runtime~main.js.map": "/cryptographics/static/js/runtime~main.67830c15.js.map",
+    "static/js/2.e159d522.chunk.js": "/cryptographics/static/js/2.e159d522.chunk.js",
+    "static/js/2.e159d522.chunk.js.map": "/cryptographics/static/js/2.e159d522.chunk.js.map",
+    "index.html": "/cryptographics/index.html",
+    "precache-manifest.9cf289ba1cf830e7bbdedfd4e751cd53.js": "/cryptographics/precache-manifest.9cf289ba1cf830e7bbdedfd4e751cd53.js",
+    "service-worker.js": "/cryptographics/service-worker.js",
+    "static/css/main.3f24a661.chunk.css.map": "/cryptographics/static/css/main.3f24a661.chunk.css.map",
+    "static/media/background.css": "/cryptographics/static/media/background.cba90b7d.jpg"
+  }
 }
