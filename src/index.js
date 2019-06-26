@@ -9,6 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 if (process.env.REACT_APP_WITH_MOCKS === 'true') {
     require('./mocks/index');
 }
+window.localStorage.clear();
 
 function App() {
     return (

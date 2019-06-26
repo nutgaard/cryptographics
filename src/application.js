@@ -50,28 +50,28 @@ function settled(...promises) {
 const coins = {
     BTC: 'Bitcoin',
     LTC: 'Litecoin',
-    XRP: 'Ripple',
-    XRB: 'RaiBlocks',
-    DASH: 'Dash',
-    XMR: 'Monero',
-    IOT: "IOTA",
+    //XRP: 'Ripple',
+    //XRB: 'RaiBlocks',
+    //DASH: 'Dash',
+    //XMR: 'Monero',
+    //MIOTA: "IOTA",
     ETH: 'Ethereum',
-    LSK: 'Lisk',
-    REQ: 'Request Network',
-    DOGE: 'Dogecoin'
+    //LSK: 'Lisk',
+    //REQ: 'Request Network',
+    //DOGE: 'Dogecoin'
 };
 const holdings = {
     BTC: 0.0974,        // Coinbase
-    LTC: 4.0465,        // Coinbase
-    XRP: 605.18423,     // Cryptonator
-    XRB: 16.3365441,    // Kucoin
-    DASH: 0.5,          // Cryptonator
-    XMR: 1,             // Cryptonator
-    IOT: 108.891,       // Binance
-    ETH: 0.1995,        // Coinbase
-    LSK: 5.65434000,    // Binance
-    REQ: 19.98,         // Binance
-    DOGE: 800           // Cryptonator
+    LTC: 7.3567,        // Coinbase
+    //XRP: 0, //605.18423,     // Cryptonator
+    //XRB: 0, //16.3365441,    // Kucoin
+    //DASH: 0, //0.5,          // Cryptonator
+    //XMR: 0, //1,             // Cryptonator
+    //MIOTA: 0, //108.891,       // Binance
+    ETH: 0.3675,        // Coinbase
+    //LSK: 0, //5.65434000,    // Binance
+    //REQ: 0, //19.98,         // Binance
+    //DOGE: 0 // 800           // Cryptonator
 };
 
 function price(state, datapoint, key) {
