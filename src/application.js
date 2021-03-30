@@ -49,26 +49,26 @@ function settled(...promises) {
 
 const coins = {
     BTC: 'Bitcoin',
-    LTC: 'Litecoin',
+    //LTC: 'Litecoin',
     //XRP: 'Ripple',
     //XRB: 'RaiBlocks',
     //DASH: 'Dash',
     //XMR: 'Monero',
     //MIOTA: "IOTA",
-    ETH: 'Ethereum',
+    //ETH: 'Ethereum',
     //LSK: 'Lisk',
     //REQ: 'Request Network',
     //DOGE: 'Dogecoin'
 };
 const holdings = {
-    BTC: 0.0974,        // Coinbase
-    LTC: 7.3567,        // Coinbase
+    BTC: 0.12367769,           // Coinbase
+    //LTC: 0, //7.3567,        // Coinbase
     //XRP: 0, //605.18423,     // Cryptonator
     //XRB: 0, //16.3365441,    // Kucoin
     //DASH: 0, //0.5,          // Cryptonator
     //XMR: 0, //1,             // Cryptonator
-    //MIOTA: 0, //108.891,       // Binance
-    ETH: 0.3675,        // Coinbase
+    //MIOTA: 0, //108.891,     // Binance
+    //ETH: 0, //0.3675,        // Coinbase
     //LSK: 0, //5.65434000,    // Binance
     //REQ: 0, //19.98,         // Binance
     //DOGE: 0 // 800           // Cryptonator
